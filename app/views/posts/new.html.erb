@@ -1,0 +1,45 @@
+<h1>(自分の題名)</h1>
+<h3>新規投稿ページ</h3>
+<%= form_for @post do |f| %>
+
+  <div class='form-group'>
+  <%= f.collection_check_boxes(:tag_ids, Tag.all, :id, :name) do |tag| %>
+      <div class='form-check'>
+          <%= tag.label class: 'form-check-label' do %>
+              <%= tag.check_box class: 'form-check-input' %>
+              <%= tag.text %>
+          <% end %>
+      </div>
+  <% end %>
+</div>
+
+# データ型がstringで自由記述の入力フォーム
+  <div class="field">
+    <%= f.label :maker %>
+    <%= f.text_field :maker, :size => 30 %>
+    <%= f.label :name %>
+    <%= f.text_field :name, :size => 30 %>
+    <%= f.label :image %>
+    <%= f.text_field :image, :size => 30 %>
+  </div>
+
+
+
+# データ型がintegerで数字のみを入力するフォーム
+  <div class="field">
+    <%= f.label :price  %>
+    <%= f.number_field :price, :size => 10 %>
+    <%= f.label :user_id  %>
+    <%= f.number_field :user_id, :size => 10 %>
+    </div>
+
+# データ型がtextで自由記述の入力フォーム
+  <div class="field">
+    <%= f.label :about  %>
+    <%= f.text_area :about, :size => "30x2" %>
+  </div>
+
+  <%= f.submit "投稿する" %>
+<% end %>
+
+<%= link_to "一覧に戻る", posts_path %>

@@ -1,0 +1,46 @@
+<h1>自分の題名</h1>
+<h3>一覧ページ</h3>
+<h3>投稿を検索</h3>
+<%= form_tag({controller:"posts",action:"index"}, method: :get) do %>
+   <%= text_field_tag :search %>
+   <%= submit_tag '検索する'  %>
+<% end %>
+<%= link_to "新規投稿へ", new_post_path %>
+
+<div class="post-container">
+  <% @posts.each do |t| %>
+    <div class="post">
+        <%= t.maker %>
+        <%= t.name %>
+        <%= t.about %>
+        <%= t.price %>
+        <%= t.image %>
+        <%= t.user_id %>
+        <%= link_to "詳細へ", post_path(t.id) %> 
+      <% if user_signed_in? %>
+        <% if current_user.already_liked?(t) %>
+            <%= button_to post_like_path(id: t.id, post_id: t.id), method: :delete do %>
+                <p>いいねを取り消す</p><%= t.likes.count %>
+            <% end %>
+        <% else %>
+            <%= button_to post_likes_path(id: t.id, post_id: t.id), method: :post do %>
+                <p>いいね</p><%= t.likes.count %>
+            <% end %>
+        <% end %>
+      <% else %>
+        <p>いいねの数 = </p><%= t.likes.count %>
+      <% end %>
+        <% if user_signed_in? && current_user.id == t.user_id %>
+        <%= link_to "編集する", edit_post_path(t.id) %>
+        <%= link_to "削除する", post_path(t.id), method: :delete %>
+    </div>
+        <% end %>
+</div>
+<% end %>
+
+<%= form_tag({controller:"posts",action:"index"}, method: :get) do %>
+  <% Tag.all.each do |t| %>
+      <li><%= check_box :tag_ids, t.name %><%= t.name %></li>
+  <% end %>
+  <%= submit_tag '検索' %>
+<% end %>
